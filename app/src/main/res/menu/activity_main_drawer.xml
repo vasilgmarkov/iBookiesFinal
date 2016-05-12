@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Popular Sports">
+<menu>
+        <item
+            android:id="@+id/soccer"
+            android:icon="@drawable/soccer"
+            android:title="SOCCER"
+            />
+        <item
+            android:id="@+id/basketball"
+            android:icon="@drawable/basketball"
+            android:title="BASKETBALL" />
+        <item
+            android:id="@+id/tenis"
+            android:icon="@drawable/tenis"
+            android:title="TENNIS" />
+
+        <item
+            android:id="@+id/hokey"
+            android:icon="@drawable/hokey"
+            android:title="HOKEY" />
+        <item
+            android:id="@+id/baseball"
+            android:icon="@drawable/baseball"
+            android:title="BASEBALL" />
+        <item
+            android:id="@+id/footballA"
+            android:icon="@drawable/footballa"
+            android:title="AM. FOOTBALL" />
+</menu>
+    </item>
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+
+
+</menu>

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_passwordC">Confirm Password</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="action_log_in">Log in</string>
+    <string name="action_Reg">Register</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_emailValid">This email is not valid</string>
+    <string name="error_invalid_passwordReg">This password is not the same</string>
+    <string name="error_invalid_passwordMin">This password is too short (Min 4 characters)</string>
+    <string name="error_incorrect_username_or_password">Username or password are  incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="user_token_label">Top Football (Soccer) Leagues</string>
+    <string name="user_token_label1">Top Basketball Leagues</string>
+    <string name="access_token_label">access_token:</string>
+    <string name="token_type_label">token_type:</string>
+    <string name="grant_type_label">grant_type:</string>
+    <string name="scope_label">scope:</string>
+    <string name="refresh_token_label">refresh_token:</string>
+    <string name="expires_in_label">expires_in:</string>
+    <string name="dummy">dummy text</string>
+    <string name="title_player_list">Player</string>
+    <string name="title_player_detail">Player Detail</string>
+    <string name="main_button">View players List</string>
+</resources>
