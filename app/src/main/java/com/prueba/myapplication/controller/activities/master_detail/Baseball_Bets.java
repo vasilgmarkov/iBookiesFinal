@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.prueba.myapplication.R;
+import com.prueba.myapplication.baseballOdds;
 import com.prueba.myapplication.basketOdds;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  * Use the {@link Basket_Bets#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Basket_Bets extends Fragment {
+public class Baseball_Bets extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,7 +59,7 @@ public class Basket_Bets extends Fragment {
         return fragment;
     }
 
-    public Basket_Bets() {
+    public Baseball_Bets() {
         // Required empty public constructor
     }
 
@@ -78,24 +79,24 @@ public class Basket_Bets extends Fragment {
 
         ListView leagues = (ListView) rootView.findViewById(R.id.listView);
 
-            Leagues nba = new Leagues("NBA", "us");
-            Leagues spain = new Leagues("Spanish Liga ACB", "es");
-            Leagues greece = new Leagues("Greek A1", "gr");
-            Leagues german = new Leagues("German BBL", "de");
-            Leagues italy = new Leagues("Italian Lega Basket", "it");
-            Leagues turkish = new Leagues("Turkish BSL", "tr");
-            Leagues france = new Leagues("French LNB Pro A", "fr");
-            Leagues LigaEuropa = new Leagues("Euroleague", "euro");
-            Leagues LigaEuropaB = new Leagues("EuroCup", "euro");
-            listLeage.add(nba);
-            listLeage.add(spain);
-            listLeage.add(turkish);
-            listLeage.add(german);
-            listLeage.add(italy);
-            listLeage.add(greece);
-            listLeage.add(france);
-            listLeage.add(LigaEuropa);
-            listLeage.add(LigaEuropaB);
+        Leagues nba = new Leagues("MLB", "us");
+        Leagues mexico = new Leagues("Mexican League", "mx");
+       /* Leagues japan = new Leagues("NBL", "jp");
+        Leagues german = new Leagues("German BBL", "de");
+        Leagues italy = new Leagues("Italian Lega Basket", "it");
+        Leagues turkish = new Leagues("Turkish BSL", "tr");
+        Leagues france = new Leagues("French LNB Pro A", "fr");
+        Leagues LigaEuropa = new Leagues("Euroleague", "euro");
+        Leagues LigaEuropaB = new Leagues("EuroCup", "euro");*/
+        listLeage.add(nba);
+        listLeage.add(mexico);
+        /*listLeage.add(turkish);
+        listLeage.add(german);
+        listLeage.add(italy);
+        listLeage.add(greece);
+        listLeage.add(france);
+        listLeage.add(LigaEuropa);
+        listLeage.add(LigaEuropaB);*/
         leagues.setAdapter(new ContactAdapter(rootView.getContext(), listLeage));
         leagues.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,7 +104,7 @@ public class Basket_Bets extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("liga", listLeage.get(position).nameLeage.toString());
-                Fragment fragment = new basketOdds();
+                Fragment fragment = new baseballOdds();
                 fragment.setArguments(bundle);
 
                 listLeage.clear();

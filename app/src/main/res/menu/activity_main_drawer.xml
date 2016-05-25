@@ -21,7 +21,7 @@
         <item
             android:id="@+id/hokey"
             android:icon="@drawable/hokey"
-            android:title="HOKEY" />
+            android:title="HOCKEY" />
         <item
             android:id="@+id/baseball"
             android:icon="@drawable/baseball"

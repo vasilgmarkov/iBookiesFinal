@@ -8,15 +8,12 @@ import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,8 +22,6 @@ import com.prueba.myapplication.controller.activities.login.LoginActivity;
 import com.prueba.myapplication.controller.activities.master_detail.PlayerCallback;
 import com.prueba.myapplication.controller.activities.master_detail.PlayerDetailActivity;
 import com.prueba.myapplication.controller.activities.master_detail.PlayerDetailFragment;
-import com.prueba.myapplication.controller.activities.master_detail.PlayerListActivity;
-import com.prueba.myapplication.controller.activities.master_detail.UserDetailActivity;
 import com.prueba.myapplication.controller.managers.PlayerManager;
 import com.prueba.myapplication.model.Apuesta;
 import com.prueba.myapplication.model.ApuestaRealizada;
@@ -37,12 +32,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BlankFragment1.OnFragmentInteractionListener} interface
+ * {@link soccerOdds.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BlankFragment1#newInstance} factory method to
+ * Use the {@link soccerOdds#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class basket extends Fragment implements PlayerCallback {
+public class tennisOdds extends Fragment implements PlayerCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,6 +52,7 @@ public class basket extends Fragment implements PlayerCallback {
     private boolean mTwoPane;
     private RecyclerView recyclerView;
     private List<Apuesta> apuestas,bet;
+    private List<Apuesta> gameOdds = new ArrayList<Apuesta>();
     private String nombreLeague;
     private String h,d,a;
 
@@ -70,11 +66,11 @@ public class basket extends Fragment implements PlayerCallback {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment1.
+     * @return A new instance of fragment soccerOdds.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment1 newInstance(String param1, String param2) {
-        BlankFragment1 fragment = new BlankFragment1();
+    public static soccerOdds newInstance(String param1, String param2) {
+        soccerOdds fragment = new soccerOdds();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -82,7 +78,7 @@ public class basket extends Fragment implements PlayerCallback {
         return fragment;
     }
 
-    public basket() {
+    public tennisOdds() {
         // Required empty public constructor
     }
 
@@ -101,7 +97,7 @@ public class basket extends Fragment implements PlayerCallback {
         // Inflate the layout for this fragment
 
 
-        View rootView = inflater.inflate(R.layout.fragment_basket, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_blank_fragment1, container, false);
 
 
         Bundle bundle = this.getArguments();
@@ -176,7 +172,8 @@ public class basket extends Fragment implements PlayerCallback {
     @Override
     public void onResume(){
         super.onResume();
-        PlayerManager.getInstance(getActivity().getApplicationContext()).getApuestasByleagueNameBasket(basket.this, nombreLeague);
+
+        PlayerManager.getInstance(getActivity().getApplicationContext()).getApuestasByleagueName(tennisOdds.this, nombreLeague);
     }
 
     @Override
@@ -204,11 +201,17 @@ public class basket extends Fragment implements PlayerCallback {
         bet=apuestaList;
         List<Apuesta> apuestaNames = new ArrayList<Apuesta>();
         int pos = 0;
-        for (int i = 0; i<apuestaList.size();i=i+2){
+        for (int i = 0; i<apuestaList.size();i=i+3){
             apuestaNames.add(pos,apuestaList.get(i));
             pos++;
         }
         apuestas = apuestaNames;
+        gameOdds.clear();
+        for (int i = 0; i<apuestaList.size();i++){
+            gameOdds.add(i,apuestaList.get(i));
+            pos++;
+        }
+
         setupRecyclerView(recyclerView);
     }
 
@@ -265,66 +268,58 @@ public class basket extends Fragment implements PlayerCallback {
 
                 }
             }
+
+
+
+
+            String game = apuestas.get(position).getApuestaName();
             int hTeam = 0, aTeam = 0;
-            String aTeamName = "", hTeamName = "",game="";
-            if(nombreLeague=="NBA") {
-
-                game = apuestas.get(position).getApuestaName();
-
-                for (int i = 1; i < game.length(); i++) {
-                    if (game.charAt(i) == '@' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
-                        hTeam = i;
-                        break;
-                    }
+            String aTeamName = "", hTeamName = "";
+            for (int i = 1; i < game.length(); i++) {
+                if (game.charAt(i) == 'v' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
+                    hTeam = i;
+                    break;
                 }
-                for (int i = 1; i < game.length(); i++) {
-                    if (game.charAt(i) == '-' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
-                        aTeam = i;
-                        break;
-                    }
-                }
-            }else{
-
-
-                game = apuestas.get(position).getApuestaName();
-
-                for (int i = 1; i < game.length(); i++) {
-                    if (game.charAt(i) == 'v' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
-                        hTeam = i;
-                        break;
-                    }
-                }
-                for (int i = 1; i < game.length(); i++) {
-                    if (game.charAt(i) == '-' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
-                        aTeam = i;
-                        break;
-                    }
-                }
-
             }
-            hTeamName = game.substring(0, hTeam - 1);
-            aTeamName = game.substring(hTeam+2, aTeam-1);
-            for (int i = 0; i < bet.size(); i++) {
+            for (int i = 1; i < game.length(); i++) {
+                if (game.charAt(i) == '-' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
+                    aTeam = i;
+                    break;
+                }
+            }
 
-                if (bet.get(i).getaApostarName().toString().equals(hTeamName)) {
+
+            hTeamName = game.substring(0, hTeam - 1);
+            aTeamName = game.substring(hTeam + 2, aTeam - 1);
+
+            for (int i = 0; i < gameOdds.size(); i++) {
+
+                if (gameOdds.get(i).getaApostarName().toString().equals(hTeamName)) {
                     //  home.setText(bet.get(i).getaApostarName().toString());
                     holder.aOdd.setText(bet.get(i).getaApostarOdd().toString());
                     //  h = i;
                 }
-                if (bet.get(i).getaApostarName().toString().equals(aTeamName)) {
+                if (gameOdds.get(i).getaApostarName().toString().equals(aTeamName)) {
                     //   away.setText(bet.get(i).getaApostarName().toString());
                     holder.hOdd.setText(bet.get(i).getaApostarOdd().toString());
                     //   a = i;
                 }
-
+                if (gameOdds.get(i).getaApostarName().toString().equals("Draw") && gameOdds.get(i).getApuestaName().toString().equals(mValues.get(position).getApuestaName())) {
+                    //     draw.setText(bet.get(i).getaApostarName().toString());
+                    holder.dOdd.setText(bet.get(i).getaApostarOdd().toString());
+                    //     d = i;
+                }
 
             }
+
+
+
+
 
             holder.dOdd.setVisibility(View.INVISIBLE);
             holder.htName.setText(hTeamName);
             holder.atName.setText(aTeamName);
             holder.mContentView.setText("VS");
-
             holder.timeGame.setText("Game Time : "+mValues.get(position).getPartidoTime());
             holder.dateGame.setText(" Game Date :"+mValues.get(position).getPartidoStartDate());
 
@@ -371,6 +366,7 @@ public class basket extends Fragment implements PlayerCallback {
                 aOdd = (TextView) view.findViewById(R.id.aodd);
                 htName = (TextView) view.findViewById(R.id.hTeamN);
                 atName = (TextView) view.findViewById(R.id.awayTeamN);
+
             }
 
             @Override

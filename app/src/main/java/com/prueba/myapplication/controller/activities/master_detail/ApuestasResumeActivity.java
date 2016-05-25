@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.prueba.myapplication.BlankFragment1;
 import com.prueba.myapplication.R;
 import com.prueba.myapplication.controller.activities.main.MainActivity;
 import com.prueba.myapplication.controller.managers.PlayerManager;

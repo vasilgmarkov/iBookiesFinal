@@ -141,7 +141,7 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback {
 
 
             int hTeam = 0, aTeam = 0;
-            if(bet.get(0).getLigaName().equals("NBA")) {
+            if(bet.get(0).getLigaName().equals("NBA")||bet.get(0).getLigaName().equals("NHL")||bet.get(0).getLigaName().equals("MLB")) {
                game = bet.get(0).getApuestaName();
 
                 for (int i = 1; i < game.length(); i++) {
@@ -156,6 +156,9 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback {
                         break;
                     }
                 }
+
+
+
             }else{
 
 
@@ -176,9 +179,40 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback {
 
             }
 
-
             hTeamName = game.substring(0 ,hTeam-1 );
             aTeamName = game.substring(hTeam+2, aTeam-1);
+
+            if(bet.get(0).getLigaName().equals("MLB")){
+                int pos =0;
+
+                for (int i = 1; i < hTeamName.length(); i++) {
+                    if (hTeamName.charAt(i) == '(' && hTeamName.charAt(i - 1) == ' ') {
+                        hTeamName = hTeamName.substring(0 ,i-1 );
+                        break;
+                    }
+                }
+                pos = 0;
+                for (int i = 1; i < aTeamName.length(); i++) {
+                    if (aTeamName.charAt(i) == '(' && aTeamName.charAt(i - 1) == ' ' ){
+                        aTeamName = aTeamName.substring(0 ,i-1 );
+                        break;
+                    }
+                }
+
+                for (int i = 1; i < bet.get(0).getaApostarName().length(); i++) {
+                    if (bet.get(0).getaApostarName().charAt(i) == '(' && bet.get(0).getaApostarName().charAt(i - 1) == ' ' ){
+                        bet.get(0).setaApostarName(bet.get(0).getaApostarName().substring(0 ,i-1 ));
+                        break;
+                    }
+                }for (int i = 1; i < bet.get(1).getaApostarName().length(); i++) {
+                    if (bet.get(1).getaApostarName().charAt(i) == '(' && bet.get(1).getaApostarName().charAt(i - 1) == ' ' ){
+                        bet.get(1).setaApostarName(bet.get(1).getaApostarName().substring(0 ,i-1 ));
+                        break;
+                    }
+                }
+            }
+
+
 
             draw.setVisibility(View.INVISIBLE);
             drawOdd.setVisibility(View.INVISIBLE);

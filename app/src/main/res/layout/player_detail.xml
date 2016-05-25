@@ -6,4 +6,5 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:textIsSelectable="true"
-    tools:context="com.example.basketball.controller.activities.master_detail.PlayerDetailFragment" />
+    tools:context="com.example.basketball.controller.activities.master_detail.PlayerDetailFragment"
+    android:background="#fbfbfb"/>

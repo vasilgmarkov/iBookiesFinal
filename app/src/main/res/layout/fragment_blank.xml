@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.prueba.myapplication.BlankFragment"
+    tools:context="com.prueba.myapplication.userAccount"
     android:id="@+id/acount"
     android:background="#fbfbfb">
 

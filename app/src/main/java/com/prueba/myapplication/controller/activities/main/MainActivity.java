@@ -1,18 +1,12 @@
 package com.prueba.myapplication.controller.activities.main;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,18 +21,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.prueba.myapplication.BlankFragment;
-import com.prueba.myapplication.BlankFragment1;
+import com.prueba.myapplication.baseballOdds;
+import com.prueba.myapplication.controller.activities.master_detail.Baseball_Bets;
+import com.prueba.myapplication.controller.activities.master_detail.Hockey_Bets;
+import com.prueba.myapplication.hockeyOdds;
+import com.prueba.myapplication.userAccount;
+import com.prueba.myapplication.soccerOdds;
 import com.prueba.myapplication.R;
-import com.prueba.myapplication.basket;
+import com.prueba.myapplication.basketOdds;
 import com.prueba.myapplication.controller.activities.master_detail.Basket_Bets;
 import com.prueba.myapplication.controller.activities.master_detail.PlayerCallback;
 import com.prueba.myapplication.controller.activities.master_detail.Soccer_Bets;
+import com.prueba.myapplication.controller.activities.master_detail.Tennis_Bets;
 import com.prueba.myapplication.controller.activities.master_detail.UserCallBack;
 import com.prueba.myapplication.controller.managers.PlayerManager;
 import com.prueba.myapplication.controller.managers.UserLoginManager;
@@ -47,12 +45,15 @@ import com.prueba.myapplication.model.Apuesta;
 import com.prueba.myapplication.model.ApuestaRealizada;
 import com.prueba.myapplication.model.User;
 import com.prueba.myapplication.model.UserToken;
+import com.prueba.myapplication.tennisOdds;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, BlankFragment.OnFragmentInteractionListener, BlankFragment1.OnFragmentInteractionListener, UserCallBack,Soccer_Bets.OnFragmentInteractionListener,Basket_Bets.OnFragmentInteractionListener, basket.OnFragmentInteractionListener,PlayerCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, userAccount.OnFragmentInteractionListener, soccerOdds.OnFragmentInteractionListener, UserCallBack,Soccer_Bets.OnFragmentInteractionListener,Basket_Bets.OnFragmentInteractionListener,
+        basketOdds.OnFragmentInteractionListener,PlayerCallback,Tennis_Bets.OnFragmentInteractionListener,
+        tennisOdds.OnFragmentInteractionListener,Hockey_Bets.OnFragmentInteractionListener,
+        hockeyOdds.OnFragmentInteractionListener,Baseball_Bets.OnFragmentInteractionListener, baseballOdds.OnFragmentInteractionListener {
 
     public static User userInfos;
     private TextView accessToken;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content_main, new BlankFragment())
+                                .replace(R.id.content_main, new userAccount())
                                 .commit();
 
                     }
@@ -192,9 +193,18 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.tenis) {
 
-        } else if (id == R.id.hokey) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, new Tennis_Bets())
+                    .commit();
 
+        } else if (id == R.id.hokey) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, new Hockey_Bets())
+                    .commit();
         } else if (id == R.id.baseball) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, new Baseball_Bets())
+                    .commit();
 
         } else if (id == R.id.footballA) {
 

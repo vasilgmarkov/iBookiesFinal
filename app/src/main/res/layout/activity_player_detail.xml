@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.example.basketball.controller.activities.master_detail.PlayerDetailActivity"
-    tools:ignore="MergeRootFrame">
+    tools:ignore="MergeRootFrame"
+    android:background="#fbfbfb">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

@@ -2,11 +2,9 @@ package com.prueba.myapplication.controller.activities.master_detail;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v4.app.Fragment;
@@ -17,8 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.prueba.myapplication.BlankFragment;
-import com.prueba.myapplication.BlankFragment1;
+import com.prueba.myapplication.soccerOdds;
 import com.prueba.myapplication.R;
 
 import java.util.ArrayList;
@@ -107,7 +104,7 @@ public class Soccer_Bets extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString("liga", listLeage.get(position).nameLeage.toString());
-                Fragment fragment = new BlankFragment1();
+                Fragment fragment = new soccerOdds();
                 fragment.setArguments(bundle);
 
                 listLeage.clear();
