@@ -27,6 +27,9 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
         SeekBar pasta;
         EditText pastaEdit;
         Button placeBet;
+        String nameGame,game,hTeamName,aTeamName,hTeamNameB,aTeamNameB;
+        Integer hTeam=0,aTeam=0,hTeamB=0,aTeamB=0,aTeamBV=0;
+
        Integer saldo = MainActivity.userInfos.getSaldo().intValue();
 
     @Override
@@ -65,6 +68,154 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
         placeBet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
+                for ( int i = a.getApuestaName().length()-1; i > 0; i--) {
+
+                    if (a.getApuestaName().charAt(i) == '-') {
+
+                      a.setApuestaName(a.getApuestaName().substring(0,i-1));
+
+                        break;
+                    }
+
+                }
+
+                if(a.getApuestaName().contains("@")){
+                    game = a.getApuestaName();
+
+                    for (int i = 1; i < game.length(); i++) {
+                        if (game.charAt(i) == '(' && game.charAt(i - 1) == ' ') {
+                            hTeamB = i;
+                            break;
+                        }
+                    }
+                    for (int i = game.length()-1; i > 0 ; i--) {
+
+                        if(game.charAt(i) == '(' &&game.charAt(i-1) == ' '){
+                            aTeamBV=i;
+
+                        }
+                        if (game.charAt(i) == '@' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
+                            aTeamB = i;
+                            break;
+                        }
+
+                    }
+
+
+
+                    hTeamNameB = game.substring(0, hTeamB - 1);
+                    aTeamNameB = game.substring(aTeamB+2, aTeamBV-1);
+
+                    a.setApuestaName(aTeamNameB+" v "+hTeamNameB);
+
+
+
+
+
+
+                    for ( int i = a.getApuestaName().length()-1; i > 0; i--) {
+
+                        if (a.getApuestaName().charAt(i) == '@') {
+                            StringBuilder usBets = new StringBuilder(a.getApuestaName());
+                            usBets.setCharAt(i,'v');
+                            a.setApuestaName(String.valueOf(usBets));
+
+                            break;
+                        }
+
+                    }
+
+
+                }
+
+                if(a.getTipoDeporte().contains("Tennis")){
+                    String p1="";
+                    String p2= "";
+                    boolean si = true;
+                    int firstGap=0;
+                    String apName = a.getApuestaName().toString();
+                    for ( int i = apName.length()-1; i > 0; i--) {
+
+                        if (apName.charAt(i) == ' ') {
+                            p2 = apName.substring(i,apName.length());
+
+                            break;
+                        }
+
+                    }
+                    for ( int i = apName.length()-1; i > 0; i--) {
+
+                        if (apName.charAt(i) == ' ') {
+                            p2 = (apName.substring(i+1, apName.length()));
+
+                            break;
+                        }
+
+                    }
+
+                    for ( int i = 1; i < apName.length()-1; i++) {
+
+
+
+                        if (apName.charAt(i) == ' ' && si == true) {
+                            firstGap=i;
+                            si = false;
+                            System.out.println(i+"o");
+                            System.out.println(si);
+                        }
+
+                        if(apName.charAt(i-1) == ' ' && apName.charAt(i) == 'v' && apName.charAt(i+1) == ' '){
+                            System.out.println(i+"h"+firstGap);
+
+                            p1 = (apName.substring(firstGap+1, i - 1));
+                            break;
+
+                        }
+                    }
+                    apName = p1+" v "+p2;
+                    a.setApuestaName(apName);
+
+                    if(a.getaApostarName().contains(p1)){
+                        a.setaApostarName(p1);
+                    }else{
+                        a.setaApostarName(p2);
+                    }
+
+
+
+                }
+
+                if(a.getTipoDeporte().contains("US") || a.getTipoDeporte().contains("NHL")){
+
+                    game = a.getApuestaName();
+
+                    for (int i = 1; i < game.length(); i++) {
+                        if (game.charAt(i) == 'v' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
+                            hTeam = i;
+                            break;
+                        }
+                    }
+                    for (int i = game.length()-1; i > 0 ; i--) {
+                        if (game.charAt(i) == 'v' && game.charAt(i + 1) == ' ' && game.charAt(i - 1) == ' ') {
+                            aTeam = i;
+                            break;
+                        }
+                    }
+
+
+                hTeamName = game.substring(0, hTeam - 1);
+                aTeamName = game.substring(aTeam+2, game.length());
+
+                a.setApuestaName(aTeamName+" v "+hTeamName);
+                }
+
+
+
+
               Double  saldoActual  = saldo-Double.valueOf(String.valueOf(pastaEdit.getText()));
                 UserManager.getInstance(v.getContext()).modificarSaldoUser(ApuestasResumeActivity.this, saldoActual);
                 ApuestaRealizada apuestaRealizada = new ApuestaRealizada();
@@ -103,6 +254,8 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
        MainActivity.userInfos.setSaldo(userInfo.getSaldo());
 
     }
+
+
 
     @Override
     public void onFailure(Throwable t) {

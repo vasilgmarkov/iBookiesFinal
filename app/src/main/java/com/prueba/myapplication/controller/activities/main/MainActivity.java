@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity
         PlayerManager.getInstance(this).getTopApuestas(MainActivity.this);
 
         topApuestasLista = (ListView) findViewById(R.id.topGamesList);
-
-
-
+        if(userInfos!=null) {
+            UserManager.getInstance(MainActivity.this).getUserInfo(MainActivity.this, MainActivity.userInfos.getLogin().toString());
+        }
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

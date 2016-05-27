@@ -10,5 +10,7 @@ public interface UserCallBack {
 
     void onSuccess(User userInfo);
 
+
+
     void onFailure(Throwable t);
 }

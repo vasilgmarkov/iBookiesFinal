@@ -13,9 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.prueba.myapplication.R;
+import com.prueba.myapplication.controller.activities.main.MainActivity;
 import com.prueba.myapplication.controller.managers.PlayerManager;
+import com.prueba.myapplication.controller.managers.UserManager;
 import com.prueba.myapplication.model.Apuesta;
 import com.prueba.myapplication.model.ApuestaRealizada;
+import com.prueba.myapplication.model.User;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ import java.util.List;
  * in two-pane mode (on tablets) or a {@link PlayerDetailActivity}
  * on handsets.
  */
-public class PlayerDetailFragment extends Fragment implements PlayerCallback {
+public class PlayerDetailFragment extends Fragment implements PlayerCallback,UserCallBack {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -61,7 +64,7 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback {
             String id = getArguments().getString(ARG_ITEM_ID);
             mItem = PlayerManager.getInstance(this.getContext()).getPlayer(id);
             PlayerManager.getInstance(this.getContext()).getApuesta1x2(PlayerDetailFragment.this, mItem.getApuestaName());
-
+            UserManager.getInstance(this.getContext()).getUserInfo(PlayerDetailFragment.this, MainActivity.userInfos.getLogin().toString());
             assert mItem != null;
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -90,6 +93,11 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback {
     public void onSuccess1(List<Apuesta> apuestaList) {
         ap1x2 = apuestaList;
         setUp(ap1x2);
+    }
+
+    @Override
+    public void onSuccess(User userInfo) {
+        MainActivity.userInfos.setSaldo(userInfo.getSaldo());
     }
 
     @Override
