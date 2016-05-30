@@ -84,6 +84,11 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
                 }
 
                 if(a.getApuestaName().contains("@")){
+
+
+
+
+
                     game = a.getApuestaName();
 
                     for (int i = 1; i < game.length(); i++) {
@@ -112,6 +117,42 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
 
                     a.setApuestaName(aTeamNameB+" v "+hTeamNameB);
 
+                    if(a.getLigaName().contains("MLB")){
+
+
+
+                        for (int i = 0; i < hTeamNameB.length()-1; i++) {
+                            if (hTeamNameB.charAt(i) == ' ') {
+                                hTeamB = i+1;
+                                break;
+                            }
+                        }
+
+                        for (int i = 0; i < aTeamNameB.length()-1; i++) {
+                            if (aTeamNameB.charAt(i) == ' ') {
+                                aTeamB = i+1;
+                                break;
+                            }
+                        }
+
+
+                        hTeamNameB = hTeamNameB.substring(hTeamB, hTeamNameB.length());
+                        aTeamNameB = aTeamNameB.substring(aTeamB, aTeamNameB.length());
+
+                        a.setApuestaName(aTeamNameB+" v "+hTeamNameB);
+
+                        if(a.getaApostarName().contains(hTeamNameB)){
+
+
+                            a.setaApostarName(hTeamNameB);
+                        }else{
+
+
+                            a.setaApostarName(aTeamNameB);
+                        }
+
+
+                    }
 
 
 
@@ -180,8 +221,16 @@ public class ApuestasResumeActivity extends AppCompatActivity implements PlayerC
                     a.setApuestaName(apName);
 
                     if(a.getaApostarName().contains(p1)){
+                        if(a.getLigaName().contains("MLB")){
+                            p1=hTeamNameB;
+                        }
+
                         a.setaApostarName(p1);
                     }else{
+                        if(a.getLigaName().contains("MLB")){
+                            p2=aTeamNameB;
+                        }
+
                         a.setaApostarName(p2);
                     }
 
