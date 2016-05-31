@@ -286,11 +286,16 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback,Use
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
+               /* Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("apuesta", bet.get(finalH));
                 i.putExtras(bundle);
 
+                startActivity(i);*/
+                bet.add(finalH, ApuestasResumeActivity.modificarApuesta(bet.get(finalH)));
+                String selecBet = bet.get(finalH).getApuestaName()+","+bet.get(finalH).getaApostarName()+","+bet.get(finalH).getaApostarOdd()+",";
+                MainActivity.setTicket(selecBet);
+                Intent i = new Intent(getActivity(), MainActivity.class);
                 startActivity(i);
             }
         });
@@ -299,11 +304,17 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback,Use
         draw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
+               /* Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("apuesta", bet.get(finalD));
                 i.putExtras(bundle);
 
+                startActivity(i);*/
+
+                bet.add(finalD, ApuestasResumeActivity.modificarApuesta(bet.get(finalD)));
+                String selecBet = bet.get(finalD).getApuestaName()+","+bet.get(finalD).getaApostarName()+","+bet.get(finalD).getaApostarOdd()+",";
+                MainActivity.setTicket(selecBet);
+                Intent i = new Intent(getActivity(), MainActivity.class);
                 startActivity(i);
             }
         });
@@ -312,11 +323,17 @@ public class PlayerDetailFragment extends Fragment implements PlayerCallback,Use
         away.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
+                /*Intent i = new Intent(getActivity(), ApuestasResumeActivity.class); // intent en fragments
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("apuesta", bet.get(finalA));
                 i.putExtras(bundle);
 
+                startActivity(i);*/
+
+                bet.add(finalA, ApuestasResumeActivity.modificarApuesta(bet.get(finalA)));
+                String selecBet = bet.get(finalA).getApuestaName()+","+bet.get(finalA).getaApostarName()+","+bet.get(finalA).getaApostarOdd()+",";
+                MainActivity.setTicket(selecBet);
+                Intent i = new Intent(getActivity(), MainActivity.class);
                 startActivity(i);
             }
         });
