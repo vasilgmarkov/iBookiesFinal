@@ -3,6 +3,7 @@ package com.prueba.myapplication.controller.activities.main;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.tech.NfcBarcode;
@@ -10,6 +11,8 @@ import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,10 +27,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.prueba.myapplication.baseballOdds;
 import com.prueba.myapplication.controller.activities.master_detail.Baseball_Bets;
@@ -61,26 +66,30 @@ public class MainActivity extends AppCompatActivity
         hockeyOdds.OnFragmentInteractionListener, Baseball_Bets.OnFragmentInteractionListener, baseballOdds.OnFragmentInteractionListener {
 
     public static User userInfos;
-    private TextView accessToken;
-    private TextView saldo;
-    private TextView grantType;
+    private TextView totalOdds;
+    private TextView balanceU;
+    private TextView totalWinning;
     private TextView refreshToken;
     private TextView expiresIn;
     private TextView scope;
-    private Button button;
+    private Button placeBetButton;
+    private EditText pastaEdit;
     private ListView topApuestasLista,ticketLista;
     private String username;
     private LinearLayout butonees;
-    private ImageButton b1, b2;
+    private ImageButton b1, b2,closeDialogTicket,deleteEvent;
     private List<ApuestaRealizada> topApuestas;
     private Integer topPosicion = 1;
     public static Menu menu;
     private static String ticket = "";
-    ArrayList<Apuesta> apuestaTicket = new ArrayList<>();
+    private ArrayList<Apuesta> apuestaTicket = new ArrayList<>();
+    private double totalCuota=1;
+    Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        topPosicion = 1;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         PlayerManager.getInstance(this).getTopApuestas(MainActivity.this);
@@ -113,9 +122,20 @@ public class MainActivity extends AppCompatActivity
                 b1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content_main, new userAccount())
-                                .commit();
+                        if(userInfos!=null) {
+                            getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.content_main, new userAccount())
+                                    .commit();
+
+                        }else{
+
+                            Toast toast2 =
+                                    Toast.makeText(getApplicationContext(),
+                                            "LogIn please", Toast.LENGTH_SHORT);
+
+                            toast2.show();
+
+                        }
 
                     }
                 });
@@ -140,6 +160,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        topPosicion = 1;
         username = getIntent().getStringExtra("userName");
         UserManager.getInstance(this.getApplicationContext()).getUserInfo(MainActivity.this, username);
         UserToken userToken = UserLoginManager.getInstance(this.getApplicationContext()).getUserToken();
@@ -188,36 +209,129 @@ public class MainActivity extends AppCompatActivity
 
 
 
-            String[] apuestasSelec = ticket.split(",");
+            final String[] apuestasSelec = ticket.split(",");
+            if(apuestasSelec.length!=1) {
+                apuestaTicket.clear();
+                totalCuota=1;
+                for (int i = 0; i < apuestasSelec.length; i = i + 3) {
 
-            for(int i = 0;i<apuestasSelec.length; i=i+3){
+                    Apuesta apuestaSekected = new Apuesta();
+                    apuestaSekected.setApuestaName(apuestasSelec[i]);
+                    apuestaSekected.setaApostarName(apuestasSelec[i + 1]);
+                    apuestaSekected.setaApostarOdd(Double.parseDouble(apuestasSelec[i + 2]));
+                    apuestaTicket.add(apuestaSekected);
 
-                Apuesta apuestaSekected = new Apuesta();
-                apuestaSekected.setaApostarName(apuestasSelec[i]);
-                apuestaSekected.setApuestaName(apuestasSelec[i + 1]);
-                apuestaSekected.setaApostarOdd(Double.parseDouble(apuestasSelec[i+2]));
-                apuestaTicket.add(apuestaSekected);
-                if (i+2==apuestasSelec.length){
-                    break;
+                    totalCuota = totalCuota*Double.parseDouble(apuestasSelec[i+2]);
+                    if (i + 2 == apuestasSelec.length) {
+                        break;
+                    }
+
                 }
+
+                dialog = new Dialog(MainActivity.this);
+                dialog.setTitle("Ticket");
+                dialog.setContentView(R.layout.ticket_layout);
+
+
+                dialog.show();
+
+                ticketLista = (ListView) dialog.findViewById(R.id.ticketLista);
+                ticketLista.setAdapter(new ContactAdapter1(getApplicationContext(), apuestaTicket));
+                totalOdds = (TextView) dialog.findViewById(R.id.totalOdd);
+                totalWinning = (TextView) dialog.findViewById(R.id.gananciaMoneyXodD);
+                balanceU = (TextView) dialog.findViewById(R.id.balanceU);
+                pastaEdit = (EditText) dialog.findViewById(R.id.amountToBet);
+                balanceU.setText(userInfos.getSaldo().toString());
+                totalOdds.setText("Total Odd : " + odd2Decimals(totalCuota));
+
+                pastaEdit.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!pastaEdit.getText().toString().matches("")) {
+                            double totalOddBet = odd2Decimals(totalCuota) * Double.parseDouble(String.valueOf(pastaEdit.getText()));
+                            totalWinning.setText("Amount to win : " + String.valueOf(totalOddBet));
+                        } else {
+
+                            totalWinning.setText("Amount to win : 0.0");
+
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+                placeBetButton = (Button) dialog.findViewById(R.id.placeBet);
+                placeBetButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (pastaEdit.getText().equals("")){
+                            Toast toast1 =
+                                    Toast.makeText(getApplicationContext(),
+                                            "No bets without iCoins!", Toast.LENGTH_SHORT);
+
+                            toast1.show();
+                        }
+                        else {
+                            ticket = "";
+                            for (int i = 0; i < apuestasSelec.length - 1; i = i + 3) {
+                                ticket = ticket + apuestasSelec[i] + ",";
+                                ticket = ticket + apuestasSelec[i + 1] + ",";
+                                if (i + 1 == apuestasSelec.length) {
+                                    break;
+                                }
+                            }
+
+                            Double saldoActual = userInfos.getSaldo().intValue() - Double.valueOf(String.valueOf(pastaEdit.getText()));
+                            UserManager.getInstance(v.getContext()).modificarSaldoUser(MainActivity.this, saldoActual);
+                            ApuestaRealizada apuestaRealizada = new ApuestaRealizada();
+                            apuestaRealizada.setCantidadApostada(Double.valueOf(String.valueOf(pastaEdit.getText())));
+                            apuestaRealizada.setCuota(odd2Decimals(totalCuota));
+                            if (ticket.split(",").length == 2){
+                                apuestaRealizada.setEventoApostado(ticket.split(",")[0]);
+                            }else{
+                                apuestaRealizada.setEventoApostado("Ticket with " +ticket.split(",").length/2 +" bets.");
+                            }
+
+                            apuestaRealizada.setGanadorApuesta(ticket);
+                            apuestaRealizada.setEstado(false);
+                            PlayerManager.getInstance(v.getContext()).createApuesta(MainActivity.this, apuestaRealizada);
+                            ticket = "";
+                            MenuItem cupon = menu.findItem(R.id.cupon);
+                            cupon.setTitle("Ticket (0)");
+                            dialog.dismiss();
+
+                        }
+                    }
+                });
+                closeDialogTicket = (ImageButton) dialog.findViewById(R.id.closeTicket);
+                closeDialogTicket.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+            }else{
+
+                Toast toast1 =
+                        Toast.makeText(getApplicationContext(),
+                                "No bets on the ticket!", Toast.LENGTH_SHORT);
+
+                toast1.show();
 
             }
 
 
 
 
-
-
-
-            final Dialog dialog = new Dialog(MainActivity.this);
-            dialog.setTitle("Ticket");
-            dialog.setContentView(R.layout.ticket_layout);
-
-
-            dialog.show();
-
-            ticketLista = (ListView) dialog.findViewById(R.id.ticketLista);
-            ticketLista.setAdapter(new ContactAdapter1(getApplicationContext(), apuestaTicket));
 
 
 
@@ -311,8 +425,9 @@ public class MainActivity extends AppCompatActivity
     public void onSuccessTop(List<ApuestaRealizada> apuestaList) {
 
         topApuestas = apuestaList;
-        topApuestasLista.setAdapter(new ContactAdapter(this, topApuestas));
         topPosicion = 1;
+        topApuestasLista.setAdapter(new ContactAdapter(this, topApuestas));
+
     }
 
     @Override
@@ -419,7 +534,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class ContactAdapter1 extends BaseAdapter {
+    private class ContactAdapter1 extends BaseAdapter implements View.OnClickListener {
         private Context context;
         private ArrayList<Apuesta> contacts;
 
@@ -452,15 +567,38 @@ public class MainActivity extends AppCompatActivity
                 view = inflater.inflate(R.layout.ticket_details, parent, false);
                 ViewInfo1 viewInfo = new ViewInfo1(view);
                 view.setTag(viewInfo);
+                deleteEvent = (ImageButton) view.findViewById(R.id.removeEvent);
+
             }
             ViewInfo1 viewInfo = (ViewInfo1) view.getTag();
             Apuesta contact = contacts.get(position);
             viewInfo.setContact(contact);
+            deleteEvent.setTag(contact);
+            deleteEvent.setOnClickListener(this);
 
             return view;
         }
 
 
+        @Override
+        public void onClick(View v) {
+            Apuesta ap = (Apuesta) v.getTag();
+            totalCuota = totalCuota / ap.getaApostarOdd();
+            apuestaTicket.remove(v.getTag());
+            ticket = "";
+            for (int i = 0; i<apuestaTicket.size();i++){
+                ticket=ticket+apuestaTicket.get(i).getApuestaName()+",";
+                ticket=ticket+apuestaTicket.get(i).getaApostarName()+",";
+                ticket=ticket+apuestaTicket.get(i).getaApostarOdd()+",";
+            }if (totalCuota<=1.0){
+               dialog.dismiss();
+            }
+            MenuItem cupon = menu.findItem(R.id.cupon);
+            cupon.setTitle("Ticket (" + (apuestaTicket.size()) + ")");
+
+            totalOdds.setText("Total Odd : "+ odd2Decimals(totalCuota));
+            ticketLista.setAdapter(new ContactAdapter1(getApplicationContext(), apuestaTicket));
+        }
     }
 
 
@@ -471,5 +609,13 @@ public class MainActivity extends AppCompatActivity
 
     public static String getTicket() {
         return ticket;
+    }
+
+    public static double odd2Decimals(Double totalOdds){
+        totalOdds = totalOdds*100;
+        int integer = totalOdds.intValue();
+        totalOdds = (double) integer/100;
+        return totalOdds;
+
     }
 }
