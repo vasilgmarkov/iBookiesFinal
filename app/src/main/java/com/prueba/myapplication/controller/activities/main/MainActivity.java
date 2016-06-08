@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,9 +36,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prueba.myapplication.baseballOdds;
+import com.prueba.myapplication.controller.activities.login.LoginActivity;
 import com.prueba.myapplication.controller.activities.master_detail.Baseball_Bets;
 import com.prueba.myapplication.controller.activities.master_detail.Hockey_Bets;
 import com.prueba.myapplication.hockeyOdds;
+import com.prueba.myapplication.topApuestaDetail;
 import com.prueba.myapplication.userAccount;
 import com.prueba.myapplication.soccerOdds;
 import com.prueba.myapplication.R;
@@ -63,7 +66,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, userAccount.OnFragmentInteractionListener, soccerOdds.OnFragmentInteractionListener, UserCallBack, Soccer_Bets.OnFragmentInteractionListener, Basket_Bets.OnFragmentInteractionListener,
         basketOdds.OnFragmentInteractionListener, PlayerCallback, Tennis_Bets.OnFragmentInteractionListener,
         tennisOdds.OnFragmentInteractionListener, Hockey_Bets.OnFragmentInteractionListener,
-        hockeyOdds.OnFragmentInteractionListener, Baseball_Bets.OnFragmentInteractionListener, baseballOdds.OnFragmentInteractionListener {
+        hockeyOdds.OnFragmentInteractionListener, Baseball_Bets.OnFragmentInteractionListener, baseballOdds.OnFragmentInteractionListener,
+        topApuestaDetail.OnFragmentInteractionListener{
 
     public static User userInfos;
     private TextView totalOdds;
@@ -95,6 +99,33 @@ public class MainActivity extends AppCompatActivity
         PlayerManager.getInstance(this).getTopApuestas(MainActivity.this);
 
         topApuestasLista = (ListView) findViewById(R.id.topGamesList);
+
+        topApuestasLista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(userInfos != null) {
+                    ApuestaRealizada apSelected;
+                    apSelected = topApuestas.get(position);
+
+
+                    Fragment fragment = new topApuestaDetail();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("apuesta", apSelected);
+                    fragment.setArguments(bundle);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.content_main, fragment)
+                            .commit();
+
+                }
+                else{
+                    Toast toast2 =
+                            Toast.makeText(getApplicationContext(),
+                                    "LogIn please", Toast.LENGTH_SHORT);
+
+                    toast2.show();
+                }
+            }
+        });
         if (userInfos != null) {
             UserManager.getInstance(MainActivity.this).getUserInfo(MainActivity.this, MainActivity.userInfos.getLogin().toString());
         }
@@ -189,6 +220,8 @@ public class MainActivity extends AppCompatActivity
         String[] apuestaSel = ticket.split(",");
         if (apuestaSel != null) {
             cupon.setTitle("Ticket (" + (apuestaSel.length / 3) + ")");
+
+
         } else {
             cupon.setVisible(false);
         }
@@ -202,10 +235,16 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+       /* if (id == R.id.login) {
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
             return true;
-        } else if (id == R.id.cupon) {
+        }
+        else if (id == R.id.logout) {
+            finish();
+            return true;
+        }
+        else*/ if (id == R.id.cupon) {
 
 
 
@@ -254,10 +293,10 @@ public class MainActivity extends AppCompatActivity
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (!pastaEdit.getText().toString().matches("")) {
                             double totalOddBet = odd2Decimals(totalCuota) * Double.parseDouble(String.valueOf(pastaEdit.getText()));
-                            totalWinning.setText("Amount to win : " + String.valueOf(totalOddBet));
+                            totalWinning.setText("To win : " + String.valueOf(totalOddBet));
                         } else {
 
-                            totalWinning.setText("Amount to win : 0.0");
+                            totalWinning.setText("To win : 0.0");
 
                         }
                     }
@@ -618,4 +657,27 @@ public class MainActivity extends AppCompatActivity
         return totalOdds;
 
     }
+
+
+
+
+
+
+    /*@Override
+    public void onClick(View v) {
+
+
+       ApuestaRealizada apSelected;
+        apSelected = topApuestas.get(topApuestasLista.getSelectedItemPosition());
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("apuestaSelected", apSelected);
+        Fragment fragment = new topApuestaDetail();
+        fragment.setArguments(bundle);
+
+
+    }*/
+
+
+
 }

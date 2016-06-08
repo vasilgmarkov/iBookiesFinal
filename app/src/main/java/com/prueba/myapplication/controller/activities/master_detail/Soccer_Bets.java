@@ -88,6 +88,8 @@ public class Soccer_Bets extends Fragment {
             Leagues bulgaria = new Leagues("Bulgarian APFG", "bg");
             Leagues championsLigaEuropa = new Leagues("UEFA Champions League", "euro");
             Leagues euroLigaEuropa = new Leagues("UEFA Europa League", "euro");
+            Leagues euro16 = new Leagues("Euro 2016", "euro");
+            Leagues copaAmerica = new Leagues("Copa America", "us");
             listLeage.add(spain);
             listLeage.add(england);
             listLeage.add(france);
@@ -97,6 +99,8 @@ public class Soccer_Bets extends Fragment {
             listLeage.add(bulgaria);
             listLeage.add(championsLigaEuropa);
             listLeage.add(euroLigaEuropa);
+            listLeage.add(euro16);
+            listLeage.add(copaAmerica);
         leagues.setAdapter(new ContactAdapter(rootView.getContext(), listLeage));
         leagues.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

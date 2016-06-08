@@ -1,9 +1,11 @@
 package com.prueba.myapplication.model;
 
+import java.io.Serializable;
+
 /**
  * Created by usu27 on 10/3/16.
  */
-public class ApuestaRealizada {
+public class ApuestaRealizada implements Serializable {
             private Double  cantidadApostada;
             private Double  cuota;
             private String eventoApostado;
